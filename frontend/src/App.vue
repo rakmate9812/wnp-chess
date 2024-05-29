@@ -1,72 +1,48 @@
 <template>
   <div>
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-      <button @click="getRoom(65)">GetRoom 65</button>
-      <button @click="modifyRoom(65)">ModifyRoom 65</button>
-      <button @click="deleteRoom(65)">DeleteRoom 65</button>
-    </nav>
     <router-view />
   </div>
 </template>
 
-<script>
-import db from "./firebase.js";
-import { ref, set, onValue, remove } from "firebase/database";
+<script lang="ts">
+import { defineComponent } from "vue";
+// import { ref, set, onValue, remove } from "firebase/database";
+// import RoomData, { defaultRoomData } from "./models/RoomData";
+// import db from "./firebase";
 
-export default {
+export default defineComponent({
   methods: {
-    createRoom() {
-      const rng = Math.floor(Math.random() * 150);
-      // console.log(rng);
-
-      //ha nincs ilyen reference h db/room akor létre is hozza
-      const reference = ref(db, "room/" + rng); // ha létezik a reference a db-ben, akkor igazából egy update fog lefutni rá
-
-      // tehát itt ha létre akarom hozni, de van már ilyen reference, akkor megkapj a a eglévő ref a set-tel beállított értékeket
-      set(reference, {
-        moves: "e4, c5",
-        timeleft: "3:00",
-      });
-    },
-
-    getRoom(roomId) {
-      console.log("asd");
-      const roomData = ref(db, "room/" + roomId /* + "/moves"*/);
-
-      // ez a cucc realtime keri le a db-t, tehát ha módosítok a db-oldalt valamit akkor küldi is egyből a kliensnek az új data-t, nézzed a konzolt amikor megfuttatod a modifyRoom-ot
-      onValue(roomData, (snapshot) => {
-        const data = snapshot.val();
-        console.log(data);
-      });
-    },
-
-    modifyRoom(roomId) {
-      const reference = ref(db, "room/" + roomId); // ha nem létezik a room, akkor nem modify-olja hanem létrehozza, ez nem jó!!!!!!!
-      // érdekes lenne megpróbálni az update functionnel az hogy hogy viselkedik
-
-      set(reference, {
-        moves: "e4, c5, d4, d5, exd5",
-        timeleft: `2:${Math.floor(Math.random() * 60)}`,
-      });
-    },
-
-    deleteRoom(roomId) {
-      const reference = ref(db, "room/" + roomId);
-
-      remove(reference);
-    },
+    // getRoom() {
+    //   const roomData = ref(db, "room/" + this.roomId /* + "/moves"*/);
+    //   onValue(
+    //     roomData,
+    //     (snapshot) => {
+    //       const data = snapshot.val();
+    //       console.log(data);
+    //       // this.roomMoves = data.moves;
+    //     }
+    //     // ,
+    //     // {
+    //     //   onlyOnce: true,
+    //     // }
+    //   );
+    // },
+    //
+    // modifyRoom(roomId) {
+    //   const reference = ref(db, "room/" + roomId); // if the room doesnt exists, it will vreate a new db reference, not so good behaviour in this case
+    //   // try the update funtion
+    //   set(reference, {
+    //     moves: "e4, c5, d4, d5, exd5",
+    //     timeleft: "asd",
+    //   });
+    // },
+    //
+    // deleteRoom(roomId) {
+    //   const reference = ref(db, "room/" + roomId);
+    //   remove(reference);
+    // },
   },
-
-  beforeMount() {
-    console.log("beforemount");
-  },
-
-  created() {
-    this.createRoom();
-  },
-};
+});
 </script>
 
 <style>

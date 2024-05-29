@@ -1,0 +1,1 @@
+-In order to make vuex work with typescript, the "shims-vuex.d.ts" file needs to be added with the code presented in the file.
